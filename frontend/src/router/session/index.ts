@@ -35,13 +35,19 @@ export async function globalStartupGuard(to : any) {
     const token = localStorage.getItem("token");
     const auth = useAuthStore();
 
-    if (token) {
-        await auth.fetchUserDetails();
 
-        if (!auth.g_islogged) {
-            localStorage.clear(); // Efface le localStorage si l'authentification échoue.
-            auth.$reset(); // Réinitialise l'état du store d'authentification.
+    if (token) {
+
+        try {
+            await auth.fetchUserDetails();
+
+        } catch (error) {
+
+                localStorage.clear(); // Efface le localStorage si l'authentification échoue.
+                auth.$reset(); // Réinitialise l'état du store d'authentification.
+
         }
+
     }
 
     return true; // Retourne toujours vrai pour continuer la navigation.
